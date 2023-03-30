@@ -9,16 +9,33 @@ export default {
       },
       data() {
             return {
-                  projects: []
+                  projects: [],
+                  currentPage: 1,
+                  lastPage: null
+            }
+      },
+      methods: {
+            getProjects() {
+                  axios
+                        .get('http://127.0.0.1:8000/api/projects', {
+                              params: {
+                                    page: this.currentPage
+                              }
+                        })
+                        .then(response => {
+                              console.log(response.data.projects.data);
+                              this.projects = response.data.projects.data;
+                              this.lastPage = response.data.projects.last_page;
+                        });
+            },
+
+            changePage(n) {
+                  this.currentPage = n;
+                  this.getProjects();
             }
       },
       created() {
-            axios
-                  .get('http://127.0.0.1:8000/api/projects')
-                  .then(response => {
-                        console.log(response.data.projects.data);
-                        this.projects = response.data.projects.data;
-                  });
+            this.getProjects();
       }
 }
 </script>
@@ -31,9 +48,19 @@ export default {
                   </div>
             </div>
 
-            <div class="row">
-                  <div v-for="project in projects" class="card col-3" style="width: 18rem;">
+            <div class="row mb-3">
+                  <div v-for="project in projects" class="col-3 mb-4">
                         <AppCard :card="project" />
+                  </div>
+            </div>
+
+            <div class="row mb-3">
+                  <div class="col">
+                        <div v-for="index in lastPage" class="d-inline-block me-2">
+                              <button class="btn btn-primary" @click="changePage(index)">
+                                    {{ index }}
+                              </button>
+                        </div>
                   </div>
             </div>
       </div>
