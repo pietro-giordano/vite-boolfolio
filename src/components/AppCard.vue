@@ -8,7 +8,7 @@ export default {
 </script>
 
 <template>
-      <div class="card" style="width: 18rem;">
+      <div class="card h-100" style="width: 18rem;">
             <img :src="card.image" class="card-img-top" alt="...">
             <div class="card-body">
                   <h3 class="card-title">{{ card.title }}</h3>
@@ -22,6 +22,10 @@ export default {
                               </li>
                         </ul>
                   </div>
+
+                  <router-link :to="{ name: 'single-project', params: { slug: card.slug } }" class="btn btn-primary mt-3">
+                        Vai ai dettagli
+                  </router-link>
             </div>
       </div>
 </template>
